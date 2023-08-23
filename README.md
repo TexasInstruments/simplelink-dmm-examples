@@ -1,12 +1,27 @@
-# SimpleLink Zstack Examples
+# SimpleLink Dynamic Multi-protocol Manager (DMM) stack Examples
 
-This repository contains the Zstack examples for TI devices supported by the
+## Overview
+
+The Dynamic Multi-protocol Manager (DMM) is a software layer that enables a single radio to run multiple wireless protocols concurrently by switching between protocol stacks in real time. DMM allows the developer to manage both protocol stacks effectively and minimize latency.
+
+By using the concurrent multi-protocol application, developers can define system states, determine task priority, and manage multiple wireless stacks concurrently. During execution, the DMM Policy Scheduler allocates radio time for each protocol determined by the priority set in the policy table and the current application states.
+
+While some solutions rely on fixed priority or time-slotted implementations, TI offers a Policy Scheduler solution that is highly customizable and allows priorities to be set dynamically by different application states.
+
+## Key features
+
+* Software enabling multi-protocol networks
+* Dynamically prioritizes radio usage
+* Simplifies concurrent multi-protocol development
+
+## GitHub DMM Repository
+This repository contains the DMM examples for TI devices supported by the
 SimpleLink Low Power F2 SDK.  To learn which devices are supported by
 the SDK, refer to the [SDK Device Association section](#sdk-association).
 
 ## Repository Layout
 
-The **examples/** directory contains the same Zstack examples provided in the
+The **examples/** directory contains the same DMM examples provided in the
 SDK, in the same directory structure.
 
 The SimpleLink Low Power F2 SDK is provided as [Git
@@ -18,7 +33,7 @@ one step like this:
 
 ```bash
 # To initialize and update the F2 SDK
-.../simplelink-Zstack-examples$ git submodule update --init cc13xx_cc26xx_sdk
+.../simplelink-dmm-examples$ git submodule update --init cc13xx_cc26xx_sdk
 ```
 
 Alternatively you can clone and initialize/update _all_ submodules when cloning a repo
@@ -58,7 +73,7 @@ versions for each SDK if needed.
 
 ## Build Examples
 
-After building the SDK libraries, you can build the Zstack examples.  The
+After building the SDK libraries, you can build the DMM examples.  The
 examples support two ways to build:
 
 * [CCS IDE](#build-examples-from-ccs)

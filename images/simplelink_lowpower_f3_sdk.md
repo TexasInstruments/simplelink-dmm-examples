@@ -1,1 +1,1 @@
-### simplelink_lowpower_f3_sdk  Based zstack Boards
+### simplelink_lowpower_f3_sdk  Based dmm Boards

@@ -89,7 +89,6 @@
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ble5stack/osal/src/inc</path>
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/common/cc26xx</path>
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/kernel/tirtos7/packages</path>
-        <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/posix/iar</path>
     </includePath>
 
     <defines>
@@ -103,12 +102,11 @@
 
     <extraOptions>
         <args>
+            <arg>-f$PROJ_DIR$/ti_utils_build_compiler.opt</arg>
             <arg>-f$PROJ_DIR$/TOOLS/defines/dmm_zr_light_remote_display_app.opts</arg>
             <arg>-f$PROJ_DIR$/TOOLS/defines/f8wrouter.opts</arg>
             <arg>-f$PROJ_DIR$/TOOLS/build_components.opt</arg>
             <arg>-f$PROJ_DIR$/TOOLS/factory_config.opt</arg>
-            <arg>-f$PROJ_DIR$/ti_ble_app_config.opt</arg>
-            <arg>-f$PROJ_DIR$/ti_build_config.opt</arg>
             <arg> -DCC26XX</arg>
             <arg> -DCC26X2</arg>
             <arg> -DCC26X2R1_LAUNCHXL</arg>
@@ -139,7 +137,7 @@
 
     <linkerExtraOptions>
         <args>
-            <arg> -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/lib/rom/iar/timac_rom_PG2_0_rom_api_linker.icf</arg>
+            <arg> -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/rom/lib/iar/timac_rom_PG2_0_rom_api_linker.icf</arg>
             <arg>--config_def=FLASH_ROM_BUILD=2</arg>
             <arg> -L$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source</arg>
             <arg>-L$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/kernel/tirtos7/packages</arg>
@@ -174,10 +172,6 @@
         </stack>
     </stacks>
 
-
-    <postBuild>
-        <command>ielftool.exe --ihex --verbose "$TARGET_BPATH$.out" "$TARGET_BPATH$.hex"</command>
-    </postBuild>
 
     <files>
         <path copyTo="$PROJ_DIR$/cc13x2x7_cc26x2x7_app_and_stack_agama.icf">$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/examples/rtos/LP_CC2652R7/dmm/dmm_zr_light_remote_display_app/tirtos7/iar/cc13x2x7_cc26x2x7_app_and_stack_agama.icf</path>

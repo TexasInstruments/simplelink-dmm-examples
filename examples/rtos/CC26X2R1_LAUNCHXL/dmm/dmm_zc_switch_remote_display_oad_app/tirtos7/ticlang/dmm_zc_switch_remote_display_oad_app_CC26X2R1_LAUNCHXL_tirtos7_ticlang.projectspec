@@ -97,8 +97,6 @@
             -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/services/saddr
             @${PROJECT_LOC}/TOOLS/build_components.opt
             @${PROJECT_LOC}/TOOLS/factory_config.opt
-            @${PROJECT_LOC}/${ConfigName}/syscfg/ti_ble_app_config.opt
-            @${PROJECT_LOC}/${ConfigName}/syscfg/ti_build_config.opt
             -DFLASH_ROM_BUILD
             -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ble5stack/common/cc26xx/npi/stack/
             -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ble5stack/common/cc26xx/rcosc
@@ -123,7 +121,6 @@
              -DCC26X2
              -DCC26X2R1_LAUNCHXL
              -DSUPPORT_PHY_CUSTOM
-             -DDeviceFamily_CC26X2
              -DNVOCMP_NVPAGES=2
              -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source
              -DSUPPORT_PHY_2_4_100KBPS2GFSK
@@ -140,12 +137,11 @@
              -DHEAPMGR_CONFIG=0x80
              -DHEAPMGR_SIZE=0x00
              -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/kernel/tirtos7/packages
-             -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/posix/ticlang
             -gdwarf-3
             -march=armv7e-m
         "
         linkerBuildOptions="
-             -l${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/lib/rom/ticlang/timac_rom_PG2_0_rom_api_linker.cmd
+             -l${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/rom/lib/ticlang/timac_rom_PG2_0_rom_api_linker.cmd
             --define=FLASH_ROM_BUILD=2
             --define=OAD_IMG_E=1
             --define=SECURITY=1 

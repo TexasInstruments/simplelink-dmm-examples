@@ -68,7 +68,6 @@
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/common/nv</path>
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/common/cc26xx</path>
         <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/kernel/tirtos7/packages</path>
-        <path>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/posix/iar</path>
     </includePath>
 
     <defines>
@@ -81,18 +80,16 @@
 
     <extraOptions>
         <args>
+            <arg>-f$PROJ_DIR$/ti_utils_build_compiler.opt</arg>
             <arg>-f$PROJ_DIR$/TOOLS/defines/dmm_154collector_sm_remote_display_app_2_4g.opts</arg>
             <arg></arg>
             <arg>-f$PROJ_DIR$/TOOLS/build_components.opt</arg>
             <arg>-f$PROJ_DIR$/TOOLS/factory_config.opt</arg>
-            <arg>-f$PROJ_DIR$/ti_ble_app_config.opt</arg>
-            <arg>-f$PROJ_DIR$/ti_build_config.opt</arg>
             <arg> -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/dmm/sm_commissioning_profile/ </arg>
             <arg> -DCC26XX</arg>
             <arg> -DCC26X2</arg>
             <arg> -DCC26X2R1_LAUNCHXL</arg>
             <arg> -DSUPPORT_PHY_CUSTOM</arg>
-            <arg> -DDeviceFamily_CC26X2</arg>
             <arg> -DNVOCMP_NVPAGES=2</arg>
             <arg> -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source</arg>
             <arg> -DSUPPORT_PHY_2_4_100KBPS2GFSK</arg>
@@ -120,7 +117,7 @@
 
     <linkerExtraOptions>
         <args>
-            <arg> -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/lib/rom/iar/timac_rom_PG2_0_rom_api_linker.icf</arg>
+            <arg> -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/rom/lib/iar/timac_rom_PG2_0_rom_api_linker.icf</arg>
             <arg> --redirect __aeabi_memcpy4=__aeabi_memcpy</arg>
             <arg>--config_def=FLASH_ROM_BUILD=2</arg>
             <arg> -L$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source</arg>
@@ -156,10 +153,6 @@
         </stack>
     </stacks>
 
-
-    <postBuild>
-        <command>ielftool.exe --ihex --verbose "$TARGET_BPATH$.out" "$TARGET_BPATH$.hex"</command>
-    </postBuild>
 
     <files>
         <path copyTo="$PROJ_DIR$/cc26xx_app_and_stack_agama_tirtos7.icf">$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/examples/rtos/LP_CC2652PSIP/dmm/dmm_154collector_sm_remote_display_app_2_4g/tirtos7/iar/cc26xx_app_and_stack_agama_tirtos7.icf</path>

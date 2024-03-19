@@ -635,8 +635,13 @@
             <name>BUILDACTION</name>
             <archiveVersion>1</archiveVersion>
             <data>
-                <prebuild></prebuild>
-                <postbuild></postbuild>
+                <buildActions>
+                        <buildAction>
+                            <cmdline>$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/dmm/apps/common/tirtos/iar/dmm_oad_post_build.bat $TARGET_BPATH$ $PROJ_DIR$ $COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$</cmdline>
+                            <workingDirectory>$PROJ_DIR$/$CONFIG_NAME$</workingDirectory>
+                            <buildSequence>postLink</buildSequence>
+                        </buildAction>
+            </buildActions>
             </data>
         </settings>
         <settings>

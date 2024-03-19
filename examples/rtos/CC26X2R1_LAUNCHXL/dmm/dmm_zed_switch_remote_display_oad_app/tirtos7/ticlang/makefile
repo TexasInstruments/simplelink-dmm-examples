@@ -6,22 +6,18 @@ CC = "$(TICLANG_ARMCOMPILER)/bin/tiarmclang"
 LNK = "$(TICLANG_ARMCOMPILER)/bin/tiarmclang"
 
 SYSCFG_CMD_STUB = $(SYSCONFIG_TOOL) --compiler ticlang --product $(COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR)/.metadata/product.json
-SYSCFG_GEN_FILES := $(shell $(SYSCFG_CMD_STUB) --listGeneratedFiles --output . ../../tirtos7/dmm_zed_switch_remote_display.syscfg)
-SYSCFG_REF_FILES := $(shell $(SYSCFG_CMD_STUB) --listReferencedFiles --output . ../../tirtos7/dmm_zed_switch_remote_display.syscfg)
+SYSCFG_FILES := $(shell $(SYSCFG_CMD_STUB) --listGeneratedFiles --listReferencedFiles --output . ../../tirtos7/dmm_zed_switch_remote_display.syscfg)
 
-ifeq ($(OS),Windows_NT)
-	SYSCFG_FILES = $(subst \,/,$(SYSCFG_REF_FILES) $(SYSCFG_GEN_FILES))
-else
-	SYSCFG_FILES = $(SYSCFG_REF_FILES) $(SYSCFG_GEN_FILES)
-endif
 SYSCFG_C_FILES = $(filter %.c,$(SYSCFG_FILES))
 SYSCFG_H_FILES = $(filter %.h,$(SYSCFG_FILES))
+SYSCFG_OPT_FILES = $(filter %.opt,$(SYSCFG_FILES))
 
 OBJECTS = application_main.obj software_stacks_ti15_4stack_radio_configuration_mac_user_config.obj application_zed_switch_StackApi_zstackapi.obj application_zed_switch_StackApi_zstackstartup.obj application_cui_cui.obj application_zed_switch_util_util_timer.obj application_zed_switch_util_mac_util.obj application_zed_switch_ui_zcl_sampleapps_ui.obj application_zed_switch_zcl_samplesw.obj application_zed_switch_zcl_samplesw_data.obj application_zed_switch_per_test.obj dmm_dmm_priority_ble_zigbee_zed.obj application_ble_remote_display_remote_display.obj drivers_ecc_ECCROMCC26XX.obj software_stacks_ble_stack_profiles_light_gatt_profile.obj software_stacks_ble_stack_profiles_provisioning_gatt_profile.obj software_stacks_ble_stack_icall_ble_rd_ble_user_config.obj software_stacks_zstack_stack_task_zstacktask.obj software_stacks_zstack_common_zcl_zcl.obj software_stacks_zstack_common_zcl_zcl_port.obj software_stacks_zstack_common_zcl_zcl_general.obj software_stacks_zstack_common_zcl_zcl_green_power.obj software_stacks_zstack_common_zcl_zcl_ha.obj software_stacks_zstack_common_zcl_zcl_diagnostic.obj software_stacks_zstack_af_af.obj software_stacks_zstack_bdb_bdb.obj software_stacks_zstack_bdb_bdb_finding_and_binding.obj software_stacks_zstack_bdb_bdb_reporting.obj software_stacks_zstack_bdb_bdb_touchlink.obj software_stacks_zstack_bdb_bdb_touchlink_initiator.obj software_stacks_zstack_bdb_bdb_touchlink_target.obj software_stacks_zstack_common_touchlink_bdb_tl_commissioning.obj software_stacks_zstack_common_touchlink_touchlink_initiator_app.obj software_stacks_zstack_common_touchlink_touchlink_target_app.obj software_stacks_zstack_common_gp_gp_common.obj software_stacks_zstack_common_gp_gp_proxy_table.obj software_stacks_zstack_common_gp_gp_proxy.obj software_stacks_zstack_nwk_nwk_globals.obj software_stacks_zstack_nwk_stub_aps.obj software_stacks_zstack_nwk_binding_table.obj software_stacks_zstack_osal_port_osal_port.obj software_stacks_zstack_osal_port_osal_port_timers.obj software_stacks_zstack_osal_port_osal_nv.obj software_stacks_zstack_sys_zdiags.obj software_stacks_zstack_sys_zglobals.obj software_stacks_zstack_zdo_zd_app.obj software_stacks_zstack_zdo_zd_config.obj software_stacks_zstack_zdo_zd_nwk_mgr.obj software_stacks_zstack_zdo_zd_object.obj software_stacks_zstack_zdo_zd_profile.obj software_stacks_zstack_zdo_zd_sec_mgr.obj software_stacks_zstack_zmac_zmac.obj software_stacks_zstack_zmac_zmac_cb.obj application_ble_remote_display_startup_osal_icall_ble.obj application_ble_remote_display_startup_rom_init.obj application_ble_remote_display_startup_ble_user_config_stack.obj software_stacks_ble_stack_rosc_rcosc_calibration.obj drivers_nv_nvocmp.obj drivers_nv_crc.obj software_stacks_ble_stack_icall_icall_cc2650.obj software_stacks_ble_stack_icall_icall_user_config.obj software_stacks_ble_stack_icall_ble_icall_api_lite.obj software_stacks_ble_stack_icall_ble_icall_hci_tl.obj software_stacks_ble_stack_profiles_devinfoservice.obj software_stacks_ble_stack_profiles_gattservapp_util.obj software_stacks_ble_stack_icall_icall.obj application_ble_remote_display_util_util.obj software_stacks_ti15_4stack_mac_high_level_mac_cfg.obj software_stacks_ti15_4stack_mac_low_level_mac_settings.obj software_stacks_ti15_4stack_mac_services_saddr.obj software_stacks_ti15_4stack_mac_hal_target_itm.obj software_stacks_ti15_4stack_mac_low_level_mac_activity.obj OAD_oad.obj OAD_oad_util.obj OAD_mark_switch_factory_img.obj OAD_oad_image_header_app.obj OAD_crc32.obj OAD_flash_interface_ext_rtos_NVS.obj OAD_bim_util.obj $(patsubst %.c,%.obj,$(notdir $(SYSCFG_C_FILES)))
 NAME = dmm_zed_switch_remote_display_oad_app
 
-CFLAGS = -I../.. \
+CFLAGS += -I../.. \
     -I. \
+    $(addprefix @,$(SYSCFG_OPT_FILES)) \
     -march=thumbv7em \
     -mcpu=cortex-m4 \
     -mthumb \
@@ -36,17 +32,17 @@ CFLAGS = -I../.. \
     -ffunction-sections \
     -fdata-sections \
     -std=gnu9x \
-    -I${CG_TOOL_ROOT}/include \
+    "-I$(TICLANG_ARMCOMPILER)/include" \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/dmm \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/dmm/apps/ \
-    @${PROJECT_ROOT}/TOOLS/defines/dmm_zed_switch_remote_display_app.opts \
-    @${PROJECT_ROOT}/TOOLS/defines/f8wenddev.opts \
-    -I${PROJECT_ROOT}/application/ \
-    -I${PROJECT_ROOT}/application/ble_remote_display \
-    -I${PROJECT_ROOT}/application/zed_switch \
-    -I${PROJECT_ROOT}/application/zed_switch/StackApi \
+    @../../TOOLS/defines/dmm_zed_switch_remote_display_app.opts \
+    @../../TOOLS/defines/f8wenddev.opts \
+    -I../../application/ \
+    -I../../application/ble_remote_display \
+    -I../../application/zed_switch \
+    -I../../application/zed_switch/StackApi \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/common/util \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/common/boards \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/zstack/apps/sw \
@@ -92,10 +88,8 @@ CFLAGS = -I../.. \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/hal/rf \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/services/sdata \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/services/saddr \
-    @${PROJECT_LOC}/TOOLS/build_components.opt \
-    @${PROJECT_LOC}/TOOLS/factory_config.opt \
-    @${PROJECT_LOC}/${ConfigName}/syscfg/ti_ble_app_config.opt \
-    @${PROJECT_LOC}/${ConfigName}/syscfg/ti_build_config.opt \
+    @../../TOOLS/build_components.opt \
+    @../../TOOLS/factory_config.opt \
     -DFLASH_ROM_BUILD \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ble5stack/common/cc26xx/npi/stack/ \
     -I${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ble5stack/common/cc26xx/rcosc \
@@ -120,7 +114,6 @@ CFLAGS = -I../.. \
      -DCC26X2 \
      -DCC26X2R1_LAUNCHXL \
      -DSUPPORT_PHY_CUSTOM \
-     -DDeviceFamily_CC26X2 \
      -DNVOCMP_NVPAGES=2 \
     " -I$(COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR)/source" \
      -DSUPPORT_PHY_2_4_100KBPS2GFSK \
@@ -141,7 +134,7 @@ CFLAGS = -I../.. \
     -gdwarf-3 \
     -march=armv7e-m
 
-LFLAGS =  -l${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/lib/rom/ticlang/timac_rom_PG2_0_rom_api_linker.cmd \
+LFLAGS +=  -l${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154stack/rom/lib/ticlang/timac_rom_PG2_0_rom_api_linker.cmd \
     --define=FLASH_ROM_BUILD=2 \
     --define=OAD_IMG_E=1 \
     --define=SECURITY=1  \
@@ -162,7 +155,12 @@ LFLAGS =  -l${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/source/ti/ti154st
     -Wl,--warn_sections \
     "-L$(TICLANG_ARMCOMPILER)/lib" \
     -llibc.a
-all: $(NAME).out
+
+all: postbuild
+
+.PHONY: postbuild
+postbuild: $(NAME).out
+	${CG_TOOL_HEX} -order MS --memwidth=8 --romwidth=8 --intel -o ${ProjName}.hex ${ProjName}; ${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/tools/common/oad/oad_image_tool --verbose ccs ../.. 7 -hex1 ${ConfigName}/${ProjName}.hex -k ${COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR}/tools/common/oad/private.pem -o ${ConfigName}/${ProjName}
 
 .INTERMEDIATE: syscfg
 $(SYSCFG_FILES): syscfg
@@ -505,4 +503,4 @@ clean:
 	@ $(RM) $(OBJECTS) > $(DEVNULL) 2>&1
 	@ $(RM) $(NAME).out > $(DEVNULL) 2>&1
 	@ $(RM) $(NAME).map > $(DEVNULL) 2>&1
-	@ $(RM) $(SYSCFG_GEN_FILES)> $(DEVNULL) 2>&1
+	@ $(RM) $(SYSCFG_FILES)> $(DEVNULL) 2>&1

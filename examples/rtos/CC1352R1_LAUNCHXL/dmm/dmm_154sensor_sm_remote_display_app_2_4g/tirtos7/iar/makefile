@@ -6,22 +6,18 @@ CC = "$(IAR_ARMCOMPILER)/bin/iccarm"
 LNK = "$(IAR_ARMCOMPILER)/bin/ilinkarm"
 
 SYSCFG_CMD_STUB = $(SYSCONFIG_TOOL) --compiler iar --product $(COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR)/.metadata/product.json
-SYSCFG_GEN_FILES := $(shell $(SYSCFG_CMD_STUB) --listGeneratedFiles --output . ../../tirtos7/dmm_154sensor_sm_remote_display_2_4g.syscfg)
-SYSCFG_REF_FILES := $(shell $(SYSCFG_CMD_STUB) --listReferencedFiles --output . ../../tirtos7/dmm_154sensor_sm_remote_display_2_4g.syscfg)
+SYSCFG_FILES := $(shell $(SYSCFG_CMD_STUB) --listGeneratedFiles --listReferencedFiles --output . ../../tirtos7/dmm_154sensor_sm_remote_display_2_4g.syscfg)
 
-ifeq ($(OS),Windows_NT)
-	SYSCFG_FILES = $(subst \,/,$(SYSCFG_REF_FILES) $(SYSCFG_GEN_FILES))
-else
-	SYSCFG_FILES = $(SYSCFG_REF_FILES) $(SYSCFG_GEN_FILES)
-endif
 SYSCFG_C_FILES = $(filter %.c,$(SYSCFG_FILES))
 SYSCFG_H_FILES = $(filter %.h,$(SYSCFG_FILES))
+SYSCFG_OPT_FILES = $(filter %.opt,$(SYSCFG_FILES))
 
 OBJECTS = application_main.obj software_stacks_ti15_4stack_radio_configuration_mac_user_config.obj application_sensor_sensor.obj application_sensor_ssf.obj application_sensor_link_controller_jdllc.obj application_cui_cui.obj application_sensor_util_util_timer.obj application_sensor_util_mac_util.obj software_stacks_ti15_4stack_stack_user_api_macTask.obj software_stacks_ti15_4stack_stack_user_api_api_mac.obj software_stacks_ti15_4stack_osal_port_osal_port.obj software_stacks_ti15_4stack_osal_port_osal_port_timers.obj application_ble_remote_display_remote_display.obj dmm_application_policy_dmm_priority_ble_154sensor.obj software_stacks_ble_stack_icall_ble_rd_ble_user_config.obj software_stacks_ble_stack_profiles_remote_display_gatt_profile.obj software_stacks_ble_stack_profiles_provisioning_gatt_profile.obj application_ble_remote_display_startup_osal_icall_ble.obj application_ble_remote_display_startup_rom_init.obj application_ble_remote_display_startup_ble_user_config_stack.obj software_stacks_ble_stack_rosc_rcosc_calibration.obj drivers_nv_nvocmp.obj drivers_nv_crc.obj software_stacks_ble_stack_icall_icall_cc2650.obj software_stacks_ble_stack_icall_icall_user_config.obj software_stacks_ble_stack_icall_ble_icall_api_lite.obj software_stacks_ble_stack_icall_ble_icall_hci_tl.obj software_stacks_ble_stack_profiles_devinfoservice.obj software_stacks_ble_stack_profiles_gattservapp_util.obj software_stacks_ble_stack_icall_icall.obj application_ble_remote_display_util_util.obj software_stacks_ti15_4stack_mac_high_level_mac_cfg.obj software_stacks_ti15_4stack_mac_low_level_mac_settings.obj software_stacks_ti15_4stack_mac_services_saddr.obj software_stacks_ti15_4stack_mac_hal_target_itm.obj software_stacks_ti15_4stack_mac_low_level_mac_activity.obj application_sensor_sm_sm_ti154.obj application_sensor_sm_sm_ecc_ti154.obj application_sensor_sm_sm_toolbox.obj software_stacks_ble_stack_profiles_sm_commissioning_gatt_profile.obj $(patsubst %.c,%.obj,$(notdir $(SYSCFG_C_FILES)))
 NAME = dmm_154sensor_sm_remote_display_app_2_4g
 
-CFLAGS = -I../.. \
+CFLAGS += -I../.. \
     -I. \
+    $(addprefix -f,$(SYSCFG_OPT_FILES)) \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$ \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti \
@@ -29,8 +25,8 @@ CFLAGS = -I../.. \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/dmm/apps/ \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/posix \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/posix/iar \
-    -f$PROJ_DIR$/TOOLS/defines/dmm_154sensor_sm_remote_display_app_2_4g.opts \
-    -I$PROJ_DIR$/application/sensor \
+    -f../../TOOLS/defines/dmm_154sensor_sm_remote_display_app_2_4g.opts \
+    -I../../application/sensor \
     -DxFEATURE_ENHANCED_ACK \
      \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/common/boards \
@@ -60,10 +56,8 @@ CFLAGS = -I../.. \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/hal/rf \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/services/sdata \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/services/saddr \
-    -f$PROJ_DIR$/TOOLS/build_components.opt \
-    -f$PROJ_DIR$/TOOLS/factory_config.opt \
-    -f$PROJ_DIR$/ti_ble_app_config.opt \
-    -f$PROJ_DIR$/ti_build_config.opt \
+    -f../../TOOLS/build_components.opt \
+    -f../../TOOLS/factory_config.opt \
     -DFLASH_ROM_BUILD \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ble5stack/common/cc26xx/rcosc \
     -I$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ble5stack/common/cc26xx/npi/stack \
@@ -87,7 +81,6 @@ CFLAGS = -I../.. \
      -DCC13XX \
      -DCC13X2 \
      -DCC13X2R1_LAUNCHXL \
-     -DDeviceFamily_CC13X2 \
      -DSUPPORT_PHY_CUSTOM \
      -DSUPPORT_PHY_50KBPS2GFSK \
      -DSUPPORT_PHY_5KBPSSLLR \
@@ -116,7 +109,7 @@ CFLAGS = -I../.. \
     --fpu=VFPv4_sp \
     --vla
 
-LFLAGS =  -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/lib/rom/iar/timac_rom_PG2_0_rom_api_linker.icf \
+LFLAGS +=  -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154stack/rom/lib/iar/timac_rom_PG2_0_rom_api_linker.icf \
      --redirect __aeabi_memcpy4=__aeabi_memcpy \
     --config_def=FLASH_ROM_BUILD=2 \
     " -L$(COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR)/source" \
@@ -129,7 +122,12 @@ LFLAGS =  -f$COM_TI_SIMPLELINK_CC13XX_CC26XX_SDK_INSTALL_DIR$/source/ti/ti154sta
     --semihosting=iar_breakpoint \
     --cpu=Cortex-M4 \
     --fpu=VFPv4_sp
-all: $(NAME).out
+
+all: postbuild
+
+.PHONY: postbuild
+postbuild: $(NAME).out
+	ielftool.exe --ihex --verbose "./$(NAME).out" "./$(NAME).hex"
 
 .INTERMEDIATE: syscfg
 $(SYSCFG_FILES): syscfg
@@ -316,4 +314,4 @@ clean:
 	@ $(RM) $(OBJECTS) > $(DEVNULL) 2>&1
 	@ $(RM) $(NAME).out > $(DEVNULL) 2>&1
 	@ $(RM) $(NAME).map > $(DEVNULL) 2>&1
-	@ $(RM) $(SYSCFG_GEN_FILES)> $(DEVNULL) 2>&1
+	@ $(RM) $(SYSCFG_FILES)> $(DEVNULL) 2>&1
